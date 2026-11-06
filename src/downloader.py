@@ -18,6 +18,14 @@ def _baixar(url: str, opcoes: dict) -> None:
     try:
         with YoutubeDL(opcoes) as ydl:
             ydl.download([url])
-            #Abrir youtube dl com as opcoes e chamar download([url])
     except YtDlpDownloadError as err:
         raise DownloadError(str(err)) from err
+    return None
+def baixar_video(url: str, pasta: str = 'downloads') -> None:
+    """Baixa o vídeo da URL em MP4, na melhor qualidade"""
+    opcoes = _opcoes_base(pasta)
+    opcoes.update({
+        'format': 'bestvideo+bestaudio/best',
+        'merge_output_format': 'mp4'    # verificar extensao se cair no caso /best (sem merge)
+    })
+    _baixar(url, opcoes)
